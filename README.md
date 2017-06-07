@@ -19,7 +19,7 @@ Or, simply return 1.0 at the function, if you do not need to convert intensity t
 We recommend to install [Anaconda](https://www.continuum.io/downloads)(Python 3.x version) which is including all packages except pydicom.
 
 ### Installing pydicom from source
-1. Download the pydicom source code from the ["Clone or download tab"]
+1. Download the pydicom source code from the ["Clone or download tab"](https://github.com/pydicom/pydicom)
 2. Unzip the downloaded file
 3. Execute the following command at unzipped  directory
 ```shell-session
