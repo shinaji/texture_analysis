@@ -129,14 +129,14 @@ $ python main.py -d ./data/PA0
     * maximum probability
     * uniformity
     
-* NGTDM
+* NGTDM (Neighbourhood Gray-Tone-Difference Matrix)
     * busyness	
     * coarseness	
     * complexity	
     * contrast	
     * strength
     
-* NGTDM
+* GLZM (Gray Level Size Zone Matrix)
     * high_intensity_emp
     * high_intensity_large_area_emp
     * high_intensity_small_area_emp
