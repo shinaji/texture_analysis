@@ -84,7 +84,7 @@ If you use "PA*" instead of "PA0" or "PA1" for the -d option, you can perform VO
 ### Calculating texture values of each VOIs
 By the following command the texture values of each VOI are calculated.
 ```shell-session
-$ python main.py -d path/to/PA/directory/PA* -o ./results -n 64 --d_glcm 1 --d_ngtdm 1`
+$ python main.py -d path/to/PA/directory/PA* -o ./results -n 64 --d_glcm 1 --d_ngtdm 1
 ```
 The options are as follows.
 * -d [src]　Specifies the path to target PA dirirectory
