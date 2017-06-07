@@ -1,4 +1,4 @@
-#Texture Analysis test tool for PET images
+# Texture Analysis test tool for PET images
 
 This tool is designed for only research purpose. Not for medical use. 
 Due to the difference in metadata among manufactures, this tool only supports PET image dicom files which taken with a GE's PET device.
@@ -19,8 +19,7 @@ Or, simply return 1.0 at the function, if you do not need to convert intensity t
 We recommend to install [Anaconda](https://www.continuum.io/downloads)(Python 3.x version) which is including all packages except pydicom.
 
 ### Installing pydicom from source
-1. Download the pydicom soruce code from the ["Clone or download tab"](https://github.com/pydicom/pydicom)
-![image](https://qiita-image-store.s3.amazonaws.com/0/65106/1b403e37-773c-bbca-ed1e-4cfe467104f5.png)
+1. Download the pydicom source code from the ["Clone or download tab"]
 2. Unzip the downloaded file
 3. Execute the following command at unzipped  directory
 ```shell-session
@@ -38,6 +37,7 @@ The returned message will be 1.0.0a1 or higher if the installation is succeeded.
 This tool assumes that data is saved in the following directory structure.
 You can not use directory structures other than the following directory structure.
 
+```
 　data/
 　　├PA0/    # Patient 0 data
 　　│　└ST0/
@@ -69,7 +69,7 @@ You can not use directory structures other than the following directory structur
 　　　　　├SE1/　　# CT dicom image
 　　　　　├SE2/　　# DICOM-RT of ROI1 (this filename must be "IM0")
 　　　　　└SE3/　　# DICOM-RT of ROI2 (this filename must be "IM0")
-
+```
 
 ## Usage
 Based on the ROI information recorded in the DICOM-RT file, VOIs are extracted from PET dicom files by VoiExtractionManager.py. The extracted VOIs are saved under the ST0 directory. After that, texture values of each VOI are calculated by main.py.
@@ -154,8 +154,7 @@ $ python main.py -d ./data/PA0
 MIT License (see LICENSE file).
 
 
-References
--------------
+## References
 Texture analysis on 18F-FDG PET/CT images to differentiate malignant and benign bone and soft-tissue lesions
 DOI 10.1007/s12149-014-0895-9
 
