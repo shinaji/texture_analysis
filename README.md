@@ -120,15 +120,6 @@ $ python main.py -d ./data/PA0
     * maximum probability
     * uniformity
     
-* GLCM (Gray-Level Co-occurence Matrix)
-    * contrast	
-    * dissimilarity
-    * entropy
-    * homogeneity
-    * inverse difference moment
-    * maximum probability
-    * uniformity
-    
 * NGTDM (Neighbourhood Gray-Tone-Difference Matrix)
     * busyness	
     * coarseness	
@@ -136,7 +127,7 @@ $ python main.py -d ./data/PA0
     * contrast	
     * strength
     
-* GLZM (Gray Level Size Zone Matrix)
+* GLSZM (Gray Level Size Zone Matrix)
     * high_intensity_emp
     * high_intensity_large_area_emp
     * high_intensity_small_area_emp

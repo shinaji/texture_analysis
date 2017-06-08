@@ -19,7 +19,7 @@ from TextureAnalysis.Utils import normalize
 
 class GLCM:
     """
-    Gray-Level Co-occurence Matrix
+    Gray-Level Co-occurrence Matrix
     """
     def __init__(self, img, theta=[0, 1], level_min=1, level_max=256, threshold=None):
         """

@@ -97,11 +97,11 @@ class GLSZM_3D:
         :param show_figure: if True, show figure
         """
 
-        # print("----GLSZM 3D-----")
+        print("----GLSZM 3D-----")
         feature_labels = []
         feature_values = []
         for key in sorted(self.fetures.keys()):
-            # print("{}: {}".format(key, self.fetures[key]))
+            print("{}: {}".format(key, self.fetures[key]))
             feature_labels.append(key)
             feature_values.append(self.fetures[key])
 
