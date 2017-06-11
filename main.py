@@ -297,7 +297,7 @@ def convert_npy_to_dicom(fname, npy_array,
         dcm.PixelSpacing = [ps[0], ps[1]]
     else:
         dcm.PixelSpacing = [ps, ps]
-    dcm.InstanceCreatorUID = '333.333.0.0.0'  # '1.2.840.113619.6.281'
+    dcm.InstanceCreatorUID = '333.333.0.0.0'
     dcm.SOPClassUID = '0.0.000.00000.0.0.0.0.0.00'
     dcm.SOPInstanceUID = '333.333.0.0.0.{}'.format(
         datetime.now().timestamp())

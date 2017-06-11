@@ -106,7 +106,7 @@ $ python main.py -d ./data/PA0
 
 ## Examples
 * [TextureAnalysis.ipynb](http://nbviewer.jupyter.org/github/shinaji/texture_analysis/blob/master/doc/TextureAnalysis.ipynb) ([doc/TextureAnalysis.ipynb](https://github.com/shinaji/texture_analysis/blob/master/doc/TextureAnalysis.ipynb))
-
+* [Gallery](https://github.com/shinaji/texture_analysis/blob/master/doc/Gallery.md)
 
 ## Implemented texture features
 * GLHA (Gray Level Histogram Analysis)			
