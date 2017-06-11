@@ -19,7 +19,7 @@ from TextureAnalysis.Utils import normalize
 
 class GLCM_3D:
     """
-    Gray-Level Co-occurrence Matrix
+    c
     """
     def __init__(self, img, d=1, level_min=1, level_max=256, threshold=None):
         """
@@ -43,7 +43,7 @@ class GLCM_3D:
             raise Exception("d>1 has not been implemented yet....")
         self.matrix_non_norm = self._construct_matrix()
         self.matrix = self.matrix_non_norm/self.matrix_non_norm.sum()
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """
@@ -75,10 +75,10 @@ class GLCM_3D:
         print("----GLCM 3D-----")
         feature_labels = []
         feature_values = []
-        for key in sorted(self.fetures.keys()):
-            print("{}: {}".format(key, self.fetures[key]))
+        for key in sorted(self.features.keys()):
+            print("{}: {}".format(key, self.features[key]))
             feature_labels.append(key)
-            feature_values.append(self.fetures[key])
+            feature_values.append(self.features[key])
 
         if show_figure:
             plt.imshow(self.matrix,

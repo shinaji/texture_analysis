@@ -104,6 +104,10 @@ $ python VoiExtractionManager.py -d ./data/PA0
 $ python main.py -d ./data/PA0
 ```
 
+## Examples
+* [TextureAnalysis.ipynb](http://nbviewer.jupyter.org/github/shinaji/texture_analysis/blob/master/doc/TextureAnalysis.ipynb)
+
+
 ## Implemented texture features
 * GLHA (Gray Level Histogram Analysis)			
     * kurtosis

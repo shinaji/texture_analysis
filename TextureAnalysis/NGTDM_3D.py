@@ -44,7 +44,7 @@ class NGTDM_3D:
         self.d = d
         assert self.d > 0, 'd must be grater than 0'
         self.s, self.p, self.ng, self.n2 = self._construct_matrix()
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """
@@ -86,10 +86,10 @@ class NGTDM_3D:
         print("----NGTDM 3D-----")
         feature_labels = []
         feature_values = []
-        for key in sorted(self.fetures.keys()):
-            print("{}: {}".format(key, self.fetures[key]))
+        for key in sorted(self.features.keys()):
+            print("{}: {}".format(key, self.features[key]))
             feature_labels.append(key)
-            feature_values.append(self.fetures[key])
+            feature_values.append(self.features[key])
 
         if show_figure:
             plt.plot(range(self.level_min, self.level_max+1),

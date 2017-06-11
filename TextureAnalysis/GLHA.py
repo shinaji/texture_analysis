@@ -48,7 +48,7 @@ class GLHA:
         self.bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
 
         self.p_glha = np.array(hist)
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """
@@ -78,20 +78,20 @@ class GLHA:
         print("----GLHA-----")
         feature_labels = []
         feature_values = []
-        for key in sorted(self.fetures.keys()):
-            print("{}: {}".format(key, self.fetures[key]))
+        for key in sorted(self.features.keys()):
+            print("{}: {}".format(key, self.features[key]))
             feature_labels.append(key)
-            feature_values.append(self.fetures[key])
+            feature_values.append(self.features[key])
 
         if show_figure:
             plt.plot(self.bin_centers, self.p_glha, 'o-b', label='Dencity')
-            plt.plot([self.fetures['mean'], self.fetures['mean']],
+            plt.plot([self.features['mean'], self.features['mean']],
                      [0, self.p_glha.max()*1.2], '-r', label='mean')
-            plt.plot([self.fetures['mean']-self.fetures['sd'],
-                      self.fetures['mean']-self.fetures['sd']],
+            plt.plot([self.features['mean']-self.features['sd'],
+                      self.features['mean']-self.features['sd']],
                      [0, self.p_glha.max()*1.2], '-.r', label='sd lower')
-            plt.plot([self.fetures['mean']+self.fetures['sd'],
-                      self.fetures['mean']+self.fetures['sd']],
+            plt.plot([self.features['mean']+self.features['sd'],
+                      self.features['mean']+self.features['sd']],
                      [0, self.p_glha.max()*1.2], '-.r', label='sd upper')
             plt.legend(loc=0, numpoints=1)
             plt.ylim(0, self.p_glha.max()*1.2)

@@ -40,7 +40,7 @@ class GLCM:
         self.level_max = level_max
         self.theta = theta
         self.matrix = self._construct_matrix()
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """

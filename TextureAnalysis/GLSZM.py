@@ -39,7 +39,7 @@ class GLSZM:
         self.level_min = level_min
         self.level_max = level_max
         self.matrix, self.zone_sizes  = self._construct_matrix()
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """
@@ -48,7 +48,7 @@ class GLSZM:
         :return: feature values
         """
 
-        fetures ={}
+        features ={}
         mat = self.matrix
         zone_sizes = self.zone_sizes
 
@@ -71,17 +71,17 @@ class GLSZM:
         low_intensity_large_area_emp = (mat * (j**2) / (i**2)).sum() / omega
         high_intensity_large_area_emp = (mat * (i**2) / (j**2)).sum() / omega
 
-        fetures['small_area_emp'] = small_area_emp
-        fetures['large_area_emp'] = large_area_emp
-        fetures['low_intensity_emp'] = low_intensity_emp
-        fetures['high_intensity_emp'] = high_intensity_emp
-        fetures['intensity_variability'] = intensity_variability
-        fetures['size_zone_variability'] = size_zone_variability
-        fetures['zone_percentage'] = zone_percentage
-        fetures['low_intensity_small_area_emp'] = low_intensity_small_area_emp
-        fetures['high_intensity_small_area_emp'] = high_intensity_small_area_emp
-        fetures['low_intensity_large_area_emp'] = low_intensity_large_area_emp
-        fetures['high_intensity_large_area_emp'] = high_intensity_large_area_emp
+        features['small_area_emp'] = small_area_emp
+        features['large_area_emp'] = large_area_emp
+        features['low_intensity_emp'] = low_intensity_emp
+        features['high_intensity_emp'] = high_intensity_emp
+        features['intensity_variability'] = intensity_variability
+        features['size_zone_variability'] = size_zone_variability
+        features['zone_percentage'] = zone_percentage
+        features['low_intensity_small_area_emp'] = low_intensity_small_area_emp
+        features['high_intensity_small_area_emp'] = high_intensity_small_area_emp
+        features['low_intensity_large_area_emp'] = low_intensity_large_area_emp
+        features['high_intensity_large_area_emp'] = high_intensity_large_area_emp
 
 
     def _construct_matrix(self):

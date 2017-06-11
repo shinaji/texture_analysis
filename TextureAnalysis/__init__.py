@@ -16,3 +16,4 @@ from .GLCM_3D import GLCM_3D
 from .GLSZM_3D import GLSZM_3D
 from .NGTDM_3D import NGTDM_3D
 from .GLHA import GLHA
+from .NGTDM import NGTDM

@@ -6,3 +6,4 @@ __pycache__/
 data/PA0/ST0/*.npy
 data/PA0/ST0/*.json
 data/PA0/ST0/*.png
+doc/.ipynb_checkpoints

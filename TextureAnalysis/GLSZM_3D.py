@@ -40,7 +40,7 @@ class GLSZM_3D:
         self.level_min = level_min
         self.level_max = level_max
         self.matrix, self.zone_sizes  = self._construct_matrix()
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """
@@ -49,7 +49,7 @@ class GLSZM_3D:
         :return: feature values
         """
 
-        fetures ={}
+        features ={}
         mat = self.matrix
         zone_sizes = self.zone_sizes
 
@@ -74,21 +74,21 @@ class GLSZM_3D:
         low_intensity_large_area_emp = (mat * (j**2) / (i**2)).sum() / omega
         high_intensity_large_area_emp = (mat * (i**2) / (j**2)).sum() / omega
 
-        fetures['small_area_emp'] = small_area_emp
-        fetures['large_area_emp'] = large_area_emp
-        fetures['low_intensity_emp'] = low_intensity_emp
-        fetures['high_intensity_emp'] = high_intensity_emp
-        fetures['intensity_variability'] = intensity_variability
-        fetures['intensity_variability2'] = intensity_variability2
-        fetures['size_zone_variability'] = size_zone_variability
-        fetures['size_zone_variability2'] = size_zone_variability2
-        fetures['zone_percentage'] = zone_percentage
-        fetures['low_intensity_small_area_emp'] = low_intensity_small_area_emp
-        fetures['high_intensity_small_area_emp'] = high_intensity_small_area_emp
-        fetures['low_intensity_large_area_emp'] = low_intensity_large_area_emp
-        fetures['high_intensity_large_area_emp'] = high_intensity_large_area_emp
+        features['small_area_emp'] = small_area_emp
+        features['large_area_emp'] = large_area_emp
+        features['low_intensity_emp'] = low_intensity_emp
+        features['high_intensity_emp'] = high_intensity_emp
+        features['intensity_variability'] = intensity_variability
+        features['intensity_variability2'] = intensity_variability2
+        features['size_zone_variability'] = size_zone_variability
+        features['size_zone_variability2'] = size_zone_variability2
+        features['zone_percentage'] = zone_percentage
+        features['low_intensity_small_area_emp'] = low_intensity_small_area_emp
+        features['high_intensity_small_area_emp'] = high_intensity_small_area_emp
+        features['low_intensity_large_area_emp'] = low_intensity_large_area_emp
+        features['high_intensity_large_area_emp'] = high_intensity_large_area_emp
 
-        return fetures
+        return features
 
     def print_features(self, show_figure=False):
         """
@@ -100,10 +100,10 @@ class GLSZM_3D:
         print("----GLSZM 3D-----")
         feature_labels = []
         feature_values = []
-        for key in sorted(self.fetures.keys()):
-            print("{}: {}".format(key, self.fetures[key]))
+        for key in sorted(self.features.keys()):
+            print("{}: {}".format(key, self.features[key]))
             feature_labels.append(key)
-            feature_values.append(self.fetures[key])
+            feature_values.append(self.features[key])
 
         if show_figure:
             plt.imshow(self.matrix,

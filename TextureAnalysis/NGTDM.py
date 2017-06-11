@@ -40,7 +40,7 @@ class NGTDM:
         self.level_max = level_max
         self.d = d
         self.s, self.p, self.ng, self.n2 = self._construct_matrix()
-        self.fetures = self._calc_features()
+        self.features = self._calc_features()
 
     def _calc_features(self):
         """
@@ -53,10 +53,12 @@ class NGTDM:
                         self.level_min:self.level_max+1]
         pi = np.hstack((self.p[:, np.newaxis],)*len(self.p))
         pj = np.vstack((self.p[np.newaxis, :],)*len(self.p))
-        ipi = pi * np.hstack((np.arange(len(self.p))[:, np.newaxis],)*len(self.p))
-        jpj = pj * np.vstack((np.arange(len(self.p))[np.newaxis, :],)*len(self.p))
-        pisi = pi * np.hstack((self.s[:, np.newaxis],)*len(p))
-        pjsj = pj * np.vstack((self.s[np.newaxis, :],)*len(p))
+        # ipi = pi * np.hstack((np.arange(len(self.p))[:, np.newaxis],)*len(self.p))
+        # jpj = pj * np.vstack((np.arange(len(self.p))[np.newaxis, :],)*len(self.p))
+        ipi = self.p * np.arange(self.level_min, self.level_max + 1)[:,np.newaxis]
+        jpj = self.p * np.arange(self.level_min, self.level_max + 1)[np.newaxis,:]
+        pisi = pi * np.hstack((self.s[:, np.newaxis],)*len(self.p))
+        pjsj = pj * np.vstack((self.s[np.newaxis, :],)*len(self.p))
         fcos = 1.0 / (1e-6 + (self.p*self.s).sum())
         fcon = 1.0 / (self.ng*(self.ng-1)) * (pi*pj*(I-J)**2).sum() * (self.s.sum()/self.n2)
         fbus = (self.p*self.s).sum() / (ipi - jpj).sum()
@@ -78,7 +80,7 @@ class NGTDM:
         """
 
         assert self.d > 0, 'd must be grater than 1'
-        assert self.level_min == 0, 'lower level must be 0c'
+        assert self.level_min == 0, 'lower level must be 0'
         # w = (2 * self.d + 1)**2
         kernel = np.ones((2*self.d+1, 2*self.d+1))
         kernel[self.d, self.d] = 0
