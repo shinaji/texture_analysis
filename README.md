@@ -7,6 +7,7 @@ Or, simply return 1.0 at the function, if you do not need to convert intensity t
 
 [Standardized_Uptake_Value](http://qibawiki.rsna.org/index.php/Standardized_Uptake_Value_\(SUV\))
 
+![image](./doc/imgs/example_img.png)
 
 ## Dependencies
 * Python 3
