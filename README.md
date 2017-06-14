@@ -82,7 +82,7 @@ $ python VoiExtractionManager.py -d path/to/PA/directory/PA*
 If you use "PA*" instead of "PA0" or "PA1" for the -d option, you can perform VOI extraction for multiple PA directories at once.
 
 ### Calculating texture values of each VOIs
-By the following command the texture values of each VOI are calculated.
+By the following command, texture values of each VOI are calculated.
 ```shell-session
 $ python main.py -d path/to/PA/directory/PA* -o ./results -n 64 --d_glcm 1 --d_ngtdm 1
 ```
@@ -90,8 +90,8 @@ The options are as follows.
 * -d [src]　Specifies the path to target PA dirirectory
 * -d [dst]　Specifies the path to output results
 * -n [levels]　Specifies the number of rescaling levels. For example, the given value is 64, the intensity of each VOI is rescaled to range of 1-64. 
-* --d_glcm [distance]　Specifies the distance paraameter of GLCM. istance>1 has not been impremented yet. 
-* --d_ngtdm [distance] Specifies the distance paraameter of NGTDM. This parameter is variable, but if the given value is greater than 1, the calculation may fail because boundary value error handling is incomplete.
+* --d_glcm [distance]　Specifies the distance parameter of GLCM. "distance>1" has not been impremented yet. 
+* --d_ngtdm [distance] Specifies the distance parameter of NGTDM. This parameter is variable, but if the given value is greater than 1, the calculation may fail because boundary value error handling is incomplete.
 * --save_glcm_as_png　　Save GLCM as image data.
 
 
