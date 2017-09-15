@@ -13,7 +13,10 @@
 """
 
 import pydicom as dicom
-from pydicom.contrib import pydicom_series
+try:
+    from pydicom.contrib import pydicom_series
+except ImportError:
+    from pydicom_ext import pydicom_series
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import cm
@@ -260,7 +263,7 @@ class VoiExtractionManager:
                     self.target_ctr_sequence].ReferencedROINumber),
             'SUV_conversion_coeff': self.suv_coeff,
             'n_pet_slices': self.pet_img.shape[0],
-            'pixel_spacing': self.pet[0].info.PixelSpacing,
+            'pixel_spacing': list(self.pet[0].info.PixelSpacing),
             'slice_thickness': self.pet[0].info.SliceThickness,
         }
         with open(filename + '_meta_data_.json', 'w') as f:
@@ -332,8 +335,23 @@ class VoiExtractionManager:
 
         t_half = float(
             p.RadiopharmaceuticalInformationSequence[0].RadionuclideHalfLife)
-        measured_time_str = str(p.RadiopharmaceuticalInformationSequence[
-                                    0].RadiopharmaceuticalStartDateTime)
+        if hasattr(p.RadiopharmaceuticalInformationSequence[0],
+                   "RadiopharmaceuticalStartDateTime"):
+            measured_time_str = str(p.RadiopharmaceuticalInformationSequence[
+                                        0].RadiopharmaceuticalStartDateTime)
+        elif hasattr(p.RadiopharmaceuticalInformationSequence[0],
+                   "RadiopharmaceuticalStartTime"):
+            print("Warning!!!\nRadiopharmaceuticalInformationSequence only "
+                  "has RadiopharmaceuticalStartTime tag. Assume the date is "
+                  "same as SeriesDate.\n"
+                  "You must carefully check if SUV value is correct.")
+            measured_time_str = \
+                str(p[0x0008, 0x0021].value) + \
+                str(p.RadiopharmaceuticalInformationSequence[0
+                    ].RadiopharmaceuticalStartTime)
+        else:
+            raise Exception("Error: This dicom file dose not include "
+                            "RadiopharmaceuticalStartDateTime data")
         measured_time = datetime.datetime.strptime(measured_time_str,
                                                    '%Y%m%d%H%M%S.%f')
         activity = float(
