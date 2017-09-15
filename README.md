@@ -15,6 +15,7 @@ Or, simply return 1.0 at the function, if you do not need to convert intensity t
 * pandas 
 * matplotlib 
 * [pydicom1.0a+](https://github.com/pydicom/pydicom)
+* [pydicom_ext](https://github.com/shinaji/pydicom_ext)
 
 We recommend to install [Anaconda](https://www.continuum.io/downloads)(Python 3.x version) which is including all packages except pydicom.
 
