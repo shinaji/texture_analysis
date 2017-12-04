@@ -9,7 +9,7 @@ Or, simply return 1.0 at the function, if you do not need to convert intensity t
 
 
 ## Dependencies
-* Python 3
+* Python 3.6 or later
 * numpy
 * sicpy 
 * pandas 
@@ -89,11 +89,11 @@ $ python main.py -d path/to/PA/directory/PA* -o ./results -n 64 --d_glcm 1 --d_n
 ```
 The options are as follows.
 * -d [src]　Specifies the path to target PA dirirectory
-* -d [dst]　Specifies the path to output results
+* -o [dst]　Specifies the path to output results
 * -n [levels]　Specifies the number of rescaling levels. For example, the given value is 64, the intensity of each VOI is rescaled to range of 1-64. 
 * --d_glcm [distance]　Specifies the distance parameter of GLCM. "distance>1" has not been impremented yet. 
 * --d_ngtdm [distance] Specifies the distance parameter of NGTDM. This parameter is variable, but if the given value is greater than 1, the calculation may fail because boundary value error handling is incomplete.
-* --save_glcm_as_png　　Save GLCM as image data.
+* --save_matrix_as_png　　Save matrices as image data.
 
 
 ## Test with example data
@@ -177,3 +177,9 @@ DOI 10.1097/MNM.0b013e32835ae50c
 
 Textural features of pretreatment 18F-FDG PET/CT images: prognostic significance in patients with advanced T-stage oropharyngeal squamous cell carcinoma.
 DOI 10.2967/jnumed.112.119289
+
+Texture analysis of FDG PET/CT for differentiating between FDG-avid benign and metastatic adrenal tumors: efficacy of combining SUV and texture parameters.
+DOI 10.1007/s00261-017-1207-3
+
+Texture analysis of 18F-FDG PET/CT for grading thymic epithelial tumours: usefulness of combining SUV and texture parameters.
+DOI 10.1259/bjr.20170546

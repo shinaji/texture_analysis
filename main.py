@@ -54,10 +54,11 @@ def main():
                         default=False,
                         dest='save_voi_as_dicom',
                         help='Save VOI image as dicom')
-    parser.add_argument('--save_glcm_as_png', action='store_true',
+    parser.add_argument('--save_matrix_as_png', action='store_true',
                         default=False,
-                        dest='save_glcm_as_png',
-                        help='Save GLCM as image data')
+                        dest='save_matrix_as_png',
+                        help='Save matrix as image data')
+
     args = parser.parse_args()
 
     if not os.path.exists(args.out):
@@ -107,6 +108,7 @@ def main():
                            voi_var_value, voi_volume, n_voxels]
 
         if n_voxels <= 1:
+            print(f"Error!\n Number of voxel was {n_voxels}. {files[i]}")
             continue
 
 
@@ -151,24 +153,6 @@ def main():
                        level_min=0, level_max=scale-1,
                        threshold=voi_min_value)
         glcm_labels, glcm_values = glcm.print_features(show_figure=False)
-        if args.save_glcm_as_png:
-            plt.imshow(glcm.matrix*100, origin='lower')
-            plt.xlabel('Normalized neighbour pixel value')
-            plt.ylabel('Normalized center pixel value')
-            cbar = plt.colorbar()
-            cbar.set_label('Probability [%]')
-            plt.title('{} roi#{} \nseries_description={}\nn_voxel={}'.format(
-                patient_name, ref_roi_number, series_description, n_voxels),
-            fontsize=9)
-            plt.savefig('{}/GLCM_{}_{}_sd_{}_roi_{}.png'.format(
-                args.out,
-                radiopharmaceutical_info,
-                patient_name,
-                series_description,
-                ref_roi_number),
-                dip=100)
-            # plt.show()
-            plt.clf()
 
         ngtdm = NGTDM_3D(data, d=args.d_ngtdm,
                          level_min=1, level_max=scale,
@@ -186,6 +170,14 @@ def main():
 
         df = pd.DataFrame([values])
         df.columns = labels
+
+        if args.save_matrix_as_png:
+            save_mat_as_png(
+                glcm, ngtdm, glszm, glha,
+                patient_name, ref_roi_number,
+                series_description, n_voxels, args.out,
+                radiopharmaceutical_info
+            )
 
         all_data.append(df)
 
@@ -209,6 +201,92 @@ def main():
         index=False,
     )
     writer.save()
+
+
+def save_mat_as_png(
+        glcm: GLCM_3D, ngtdm: NGTDM_3D, glszm: GLSZM_3D, glha: GLHA,
+        patient_name: str, ref_roi_number: int,
+        series_description: str, n_voxels: int, base_dir: str,
+        radiopharmaceutical_info: str
+):
+    plt.imshow(glcm.matrix * 100, origin='lower')
+    plt.xlabel('Normalized neighbour pixel value')
+    plt.ylabel('Normalized center pixel value')
+    cbar = plt.colorbar()
+    cbar.set_label('Probability [%]')
+    plt.title('{} roi#{} \nseries_description={}\nn_voxel={}'.format(
+        patient_name, ref_roi_number, series_description, n_voxels),
+        fontsize=9)
+    if not os.path.exists(f"{base_dir}/GLCM_img"):
+        os.mkdir(f"{base_dir}/GLCM_img")
+    plt.savefig('{}/GLCM_img/GLCM_{}_{}_sd_{}_roi_{}.png'.format(
+        base_dir,
+        radiopharmaceutical_info,
+        patient_name,
+        series_description,
+        ref_roi_number),
+        dip=100)
+    plt.clf()
+
+    img2 = plt.imshow(glszm.matrix,
+                      aspect=glszm.matrix.shape[1] / glszm.matrix.shape[0],
+                      extent=[0.5, glszm.matrix.shape[1] + 0.5,
+                              glszm.matrix.shape[0] + 1, 1])
+    plt.ylabel('Pixel value')
+    plt.xlabel('Size')
+    plt.title('{} roi#{} \nseries_description={}\nn_voxel={}'.format(
+        patient_name, ref_roi_number, series_description, n_voxels),
+        fontsize=9)
+    cbar2 = plt.gcf().colorbar(img2, fraction=0.046, pad=0.04)
+    cbar2.set_label('Number of areas')
+    if not os.path.exists(f"{base_dir}/GLSZM_img"):
+        os.mkdir(f"{base_dir}/GLSZM_img")
+    plt.savefig('{}/GLSZM_img/GLSZM_{}_{}_sd_{}_roi_{}.png'.format(
+        base_dir,
+        radiopharmaceutical_info,
+        patient_name,
+        series_description,
+        ref_roi_number),
+        dip=100)
+    plt.clf()
+
+    img2 = plt.imshow(ngtdm.s.reshape(ngtdm.s.size, 1),
+                      aspect=1 / ngtdm.s.shape[0],
+                      extent=[0.5, 1 + 0.5, ngtdm.s.shape[0] + 1, 1])
+    plt.ylabel('Pixel value')
+    plt.title('{} roi#{} \nseries_description={}\nn_voxel={}'.format(
+        patient_name, ref_roi_number, series_description, n_voxels),
+        fontsize=9)
+    cbar2 = plt.gcf().colorbar(img2, fraction=0.046, pad=0.04)
+    if not os.path.exists(f"{base_dir}/NGTDM_img"):
+        os.mkdir(f"{base_dir}/NGTDM_img")
+    plt.savefig('{}/NGTDM_img/NGTDM_{}_{}_sd_{}_roi_{}.png'.format(
+        base_dir,
+        radiopharmaceutical_info,
+        patient_name,
+        series_description,
+        ref_roi_number),
+        dip=100)
+    plt.clf()
+
+    hst = plt.hist(glha.img.flatten(), bins=64, range=[1, 64])
+    plt.xlabel('Pixel value')
+    plt.ylabel('Frequency')
+    plt.title('{} roi#{} \nseries_description={}\nn_voxel={}'.format(
+        patient_name, ref_roi_number, series_description, n_voxels),
+        fontsize=9)
+    plt.gca().set_aspect(64 / hst[0].max())
+    if not os.path.exists(f"{base_dir}/GLHA_img"):
+        os.mkdir(f"{base_dir}/GLHA_img")
+    plt.savefig('{}/GLHA_img/GLHA_{}_{}_sd_{}_roi_{}.png'.format(
+        base_dir,
+        radiopharmaceutical_info,
+        patient_name,
+        series_description,
+        ref_roi_number),
+        dip=100)
+    plt.clf()
+
 
 
 def convert_npy_to_dicom(fname, npy_array,
