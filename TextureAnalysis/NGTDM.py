@@ -55,15 +55,23 @@ class NGTDM:
         pj = np.vstack((self.p[np.newaxis, :],)*len(self.p))
         # ipi = pi * np.hstack((np.arange(len(self.p))[:, np.newaxis],)*len(self.p))
         # jpj = pj * np.vstack((np.arange(len(self.p))[np.newaxis, :],)*len(self.p))
-        ipi = self.p * np.arange(self.level_min, self.level_max + 1)[:,np.newaxis]
-        jpj = self.p * np.arange(self.level_min, self.level_max + 1)[np.newaxis,:]
+        # ipi = self.p * np.arange(self.level_min, self.level_max + 1)[:,np.newaxis]
+        # jpj = self.p * np.arange(self.level_min, self.level_max + 1)[np.newaxis,:]
+        ipi = np.hstack(
+            ((self.p*np.arange(1, len(self.p)+1))[:, np.newaxis],) * len(self.p))
+        jpj = np.vstack(
+            ((self.p*np.arange(1, len(self.p)+1))[np.newaxis, :],) * len(self.p))
         pisi = pi * np.hstack((self.s[:, np.newaxis],)*len(self.p))
         pjsj = pj * np.vstack((self.s[np.newaxis, :],)*len(self.p))
         fcos = 1.0 / (1e-6 + (self.p*self.s).sum())
         fcon = 1.0 / (self.ng*(self.ng-1)) * (pi*pj*(I-J)**2).sum() * (self.s.sum()/self.n2)
-        fbus = (self.p*self.s).sum() / (ipi - jpj).sum()
-        mask = (pi + pj) > 0
-        fcom = (np.abs(I-J)[mask] / (self.n2*(pi+pj)[mask]) * (pisi + pjsj)[mask]).sum()
+        mask1 = np.logical_and(pi > 0, pj > 0)
+        mask2 = self.p > 0
+        if (ipi[mask1] - jpj[mask1]).sum() == 0:
+            fbus = np.inf
+        else:
+            fbus = (self.p*self.s)[mask2].sum() / (ipi[mask1] - jpj[mask1]).sum()
+        fcom = (np.abs(I-J)[mask1] / (self.n2*(pi+pj)[mask1]) * (pisi + pjsj)[mask1]).sum()
         fstr = ((pi + pj) * (I-J)**2).sum() / (1e-6+self.s.sum())
         features['coarseness'] = fcos
         features['contrast'] = fcon
@@ -80,7 +88,7 @@ class NGTDM:
         """
 
         assert self.d > 0, 'd must be grater than 1'
-        assert self.level_min == 0, 'lower level must be 0'
+        assert self.level_min > 0, 'lower level must be greater than 0'
         # w = (2 * self.d + 1)**2
         kernel = np.ones((2*self.d+1, 2*self.d+1))
         kernel[self.d, self.d] = 0
@@ -92,8 +100,8 @@ class NGTDM:
         crop_img = np.array(self.img[self.d:h-self.d, self.d:w-self.d])
         for i in range(self.level_min, self.level_max+1):
             indices = np.argwhere(crop_img == i)
-            s[i] = np.abs(i - A[indices]).sum()
-            p[i] = float(len(indices)) / np.prod(crop_img.shape)
+            s[i-self.level_min] = np.abs(i - A[indices[:, 0], indices[:, 1]]).sum()
+            p[i-self.level_min] = float(len(indices)) / np.prod(crop_img.shape)
         ng = np.sum(np.unique(crop_img)>=0)
         n2 = np.prod(crop_img.shape)
         return s, p, ng, n2

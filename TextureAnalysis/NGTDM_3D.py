@@ -57,18 +57,30 @@ class NGTDM_3D:
                         self.level_min:self.level_max+1]
         pi = np.hstack((self.p[:, np.newaxis],)*len(self.p))
         pj = np.vstack((self.p[np.newaxis, :],)*len(self.p))
-        ipi = self.p*np.arange(self.level_min, self.level_max+1)[:, np.newaxis]
-        jpj = self.p*np.arange(self.level_min, self.level_max+1)[np.newaxis, :]
+        # ipi = self.p*np.arange(self.level_min, self.level_max+1)[:, np.newaxis]
+        # jpj = self.p*np.arange(self.level_min, self.level_max+1)[np.newaxis, :]
         # ipi = pi * np.hstack((np.arange(self.level_min, self.level_max+1)[:, np.newaxis],)*len(self.p))
         # jpj = pj * np.vstack((np.arange(self.level_min, self.level_max+1)[np.newaxis, :],)*len(self.p))
+        ipi = np.hstack(
+            ((self.p * np.arange(1, len(self.p) + 1))[:, np.newaxis],) * len(
+                self.p))
+        jpj = np.vstack(
+            ((self.p * np.arange(1, len(self.p) + 1))[np.newaxis, :],) * len(
+                self.p))
         pisi = pi * np.hstack((self.s[:, np.newaxis],)*len(self.p))
         pjsj = pj * np.vstack((self.s[np.newaxis, :],)*len(self.p))
         fcos = 1.0 / (1e-6 + (self.p*self.s).sum())
         fcon = 1.0 / (self.ng*(self.ng-1)) * (pi*pj*(I-J)**2).sum() * (self.s.sum()/self.n2)
-        fbus = (self.p*self.s).sum() / (ipi - jpj).sum()
-        mask = (pi + pj) > 0
-        fcom = (np.abs(I-J)[mask] / (self.n2*(pi+pj)[mask]) * (pisi + pjsj)[mask]).sum()
-        fstr = ((pi + pj) * (I-J)**2).sum() / (1e-6+self.s.sum())
+        mask1 = np.logical_and(pi > 0, pj > 0)
+        mask2 = self.p > 0
+        if (ipi[mask1] - jpj[mask1]).sum() == 0:
+            fbus = np.inf
+        else:
+            fbus = (self.p * self.s)[mask2].sum() / (
+                        ipi[mask1] - jpj[mask1]).sum()
+        fcom = (np.abs(I - J)[mask1] / (self.n2 * (pi + pj)[mask1]) *
+                (pisi + pjsj)[mask1]).sum()
+        fstr = ((pi + pj) * (I - J) ** 2).sum() / (1e-6 + self.s.sum())
         features['coarseness'] = fcos
         features['contrast'] = fcon
         features['busyness'] = fbus

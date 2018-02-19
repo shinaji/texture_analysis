@@ -105,12 +105,13 @@ class GLSZM:
                 elements.append([i, size])
 
         elements = np.array(elements)
+        min_element_size = elements[:, 1].min()
         rows = (self.level_max - self.level_min) + 1
-        cols = elements[:, 1].max()
+        cols = elements[:, 1].max() - min_element_size + 1
         mat = np.zeros((rows, cols), dtype=np.float)
         zone_sizes = np.unique(elements[:, 1])
         for element in elements:
-            mat[element[0], element[1]-1] += 1
+            mat[element[0], element[1]-min_element_size] += 1
 
         return mat, zone_sizes
 

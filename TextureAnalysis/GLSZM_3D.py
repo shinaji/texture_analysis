@@ -37,8 +37,10 @@ class GLSZM_3D:
         self.img, self.slope, self.intercept = \
             normalize(img, level_min, level_max, threshold)
         self.n_level = (level_max - level_min) + 1
-        self.level_min = level_min
-        self.level_max = level_max
+        self.min_level = level_min
+        self.max_level = level_max
+        self.min_zone_size = None
+        self.max_zone_size = None
         self.matrix, self.zone_sizes  = self._construct_matrix()
         self.features = self._calc_features()
 
@@ -58,7 +60,7 @@ class GLSZM_3D:
         max_size = zone_sizes.max()
         j = np.array(range(min_size, max_size+1))[np.newaxis, :]
         j = np.vstack((j,)*mat.shape[0])
-        i = np.array(range(self.level_min, self.level_max+1))[:, np.newaxis]
+        i = np.array(range(self.min_level, self.max_level + 1))[:, np.newaxis]
         i = np.hstack((i,)*mat.shape[1])
         small_area_emp = (mat / (j**2)).sum() / omega
         large_area_emp = (mat * (j**2)).sum() / omega
@@ -122,7 +124,7 @@ class GLSZM_3D:
         """
         s = np.ones((3, 3, 3))
         elements = []
-        for i in range(self.level_min, self.level_max+1):
+        for i in range(self.min_level, self.max_level + 1):
             tmp_img = np.array(self.img)
             tmp_img = (tmp_img == i)
             labeled_array, num_features = measurements.label(tmp_img,
@@ -132,12 +134,14 @@ class GLSZM_3D:
                 elements.append([i, size])
 
         elements = np.array(elements)
-        rows = (self.level_max - self.level_min) + 1
-        cols = elements[:, 1].max()
+        self.min_zone_size = elements[:, 1].min()
+        self.max_zone_size = elements[:, 1].max()
+        rows = (self.max_level - self.min_level) + 1
+        cols = self.max_zone_size - self.min_zone_size + 1
         mat = np.zeros((rows, cols), dtype=np.float)
         zone_sizes = np.unique(elements[:, 1])
         for element in elements:
-            mat[element[0]-self.level_min, element[1]-1] += 1
+            mat[element[0] - self.min_level, element[1] - self.min_zone_size] += 1
 
         return mat, zone_sizes
 
