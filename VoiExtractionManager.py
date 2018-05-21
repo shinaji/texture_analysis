@@ -29,6 +29,7 @@ import json
 from Utils import is_inside
 import time
 import argparse
+import re
 
 __version__ = "0.1.0"
 
@@ -474,7 +475,10 @@ if __name__ == '__main__':
                         help='Directory of target data files.')
     args = parser.parse_args()
 
-    for pa_index in range(len(glob.glob(args.data_dir_path))):
+    pa_dir_list = glob.glob(args.data_dir_path)
+    min_pa_num = min([int(re.findall("PA([0-9]*)", d)[0]) for d in pa_dir_list])
+    max_pa_num = max([int(re.findall("PA([0-9]*)", d)[0]) for d in pa_dir_list])
+    for pa_index in range(min_pa_num, max_pa_num+1):
         try:
             target_dir = args.data_dir_path.replace('*', '%d' % pa_index)
             target_dir = os.path.join(target_dir, 'ST0')
@@ -494,8 +498,10 @@ if __name__ == '__main__':
                 print('FLIP! {:.3f}s'.format(time.time()-begin))
 
             ctrs = []
-            n = len(glob.glob(os.path.join(target_dir, 'SE*')))
-            for i in range(2, n):
+            se_dir_list = glob.glob(os.path.join(target_dir, 'SE*'))
+            min_se_n = min([int(re.findall("SE([0-9]*)", d)[0]) for d in se_dir_list])
+            max_se_n = max([int(re.findall("SE([0-9]*)", d)[0]) for d in se_dir_list])
+            for i in range(max(2, min_se_n), max_se_n+1):
                 ctr_dcm_fname = '{}/SE{}/IM0'.format(target_dir, i)
                 if os.path.exists(ctr_dcm_fname):
                     print('Load contour: {}'.format(ctr_dcm_fname))
