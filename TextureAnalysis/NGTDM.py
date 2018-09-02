@@ -67,10 +67,10 @@ class NGTDM:
         fcon = 1.0 / (self.ng*(self.ng-1)) * (pi*pj*(I-J)**2).sum() * (self.s.sum()/self.n2)
         mask1 = np.logical_and(pi > 0, pj > 0)
         mask2 = self.p > 0
-        if (ipi[mask1] - jpj[mask1]).sum() == 0:
+        if (np.abs(ipi[mask1] - jpj[mask1])).sum() == 0:
             fbus = np.inf
         else:
-            fbus = (self.p*self.s)[mask2].sum() / (ipi[mask1] - jpj[mask1]).sum()
+            fbus = (self.p*self.s)[mask2].sum() / (np.abs(ipi[mask1] - jpj[mask1])).sum()
         fcom = (np.abs(I-J)[mask1] / (self.n2*(pi+pj)[mask1]) * (pisi + pjsj)[mask1]).sum()
         fstr = ((pi + pj) * (I-J)**2).sum() / (1e-6+self.s.sum())
         features['coarseness'] = fcos
